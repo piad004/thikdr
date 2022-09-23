@@ -25,7 +25,7 @@ class _WorkerTabState extends State<WorkerTabPage> with TickerProviderStateMixin
   void initState() {
     super.initState();
     tabController =
-        Get.put(TabController(vsync: this, length: 2));
+        (TabController(vsync: this, length: 2));
   }
 
   @override

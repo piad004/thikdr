@@ -8,13 +8,14 @@ import '../../../../../theme/app_style.dart';
 import '../../../../../utils/color_constant.dart';
 import '../../../../../utils/image_constant.dart';
 import '../../../../../utils/math_utils.dart';
+import '../../../leaddetails/model/lead_model.dart';
 import '../models/leads_item_model.dart';
 
 // ignore: must_be_immutable
 class LeadsItemWidget extends StatelessWidget {
-  LeadsItemWidget(this.leadsItemModelObj);
+  LeadsItemWidget(this.leadModel);
 
-  LeadsItemModel leadsItemModelObj;
+  LeadList leadModel;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,15 @@ class LeadsItemWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
+      child:  InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => LeadDetailsPage(leadModel.id.toString())));
+        },
+        child:
+      Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -92,7 +101,7 @@ class LeadsItemWidget extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          "UPVC DOORS".tr,
+                          leadModel.category.toString(),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.textstylerobotoromanregular8.copyWith(
@@ -135,7 +144,7 @@ class LeadsItemWidget extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          "27 Jun, 2022".tr,
+                          leadModel.lead_date.toString(),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.textstylerobotoromanregular8.copyWith(
@@ -178,7 +187,7 @@ class LeadsItemWidget extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          "10:30 AM".tr,
+                          leadModel.lead_time.toString(),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.textstylerobotoromanregular8.copyWith(
@@ -207,7 +216,7 @@ class LeadsItemWidget extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(left: 8, right: 8),
                       child: Text(
-                        "Verified Lead".tr,
+                        leadModel.lead_status.toString(),
                         textAlign: TextAlign.left,
                         style:
                             AppStyle.textstylerobotoromanregular1013.copyWith(
@@ -236,7 +245,7 @@ class LeadsItemWidget extends StatelessWidget {
               ),
             ),
             child: Text(
-              "Surya".tr,
+              leadModel.user.toString(),
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.left,
               style: AppStyle.textstylerobotobold12.copyWith(
@@ -259,7 +268,7 @@ class LeadsItemWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width - 140,
+                  //width: MediaQuery.of(context).size.width - 135,
                   margin: EdgeInsets.only(
                     left: getHorizontalSize(
                       11.00,
@@ -269,7 +278,8 @@ class LeadsItemWidget extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    "Guntur, Andhra Pradesh, India \n08 April, 2022".tr,
+                    leadModel.address.toString(),
+                    //"Guntur, Andhra Pradesh, India \n08 April, 2022".tr,
                     maxLines: 2,
                     textAlign: TextAlign.left,
                     style: AppStyle.textstylerobotoromanregular104.copyWith(
@@ -301,7 +311,7 @@ class LeadsItemWidget extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          "Rs.72000".tr,
+                          "₹ "+leadModel.estmd_price.toString(),
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.left,
                           style: AppStyle.textstylerobotoromanbold121.copyWith(
@@ -376,8 +386,7 @@ class LeadsItemWidget extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    "Required 6 pieces of UPVC Doors for home construction at Guntur, Andhra Pradesh"
-                        .tr,
+                    leadModel.description.toString(),
                     maxLines: 2,
                     textAlign: TextAlign.left,
                     style: AppStyle.textstylerobotoromanregular1014.copyWith(
@@ -390,10 +399,10 @@ class LeadsItemWidget extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
+                   /* Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LeadDetailsPage()));
+                            builder: (context) => LeadDetailsPage()));*/
                   },
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -467,7 +476,7 @@ class LeadsItemWidget extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        "Budget  Rs 40, 000".tr,
+                        "Budget ₹ "+ leadModel.budget.toString(),
                         maxLines: 1,
                         textAlign: TextAlign.left,
                         style: AppStyle.textstylerobotoromanregular81.copyWith(
@@ -505,7 +514,8 @@ class LeadsItemWidget extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        "Unit: Area sq.ft / Qty: 9000".tr,
+                       // "Unit: Area sq.ft / Qty: 9000".tr,
+                        "Unit:"+ leadModel.unit.toString()+" / Qty:"+leadModel.qty.toString(),
                         maxLines: 1,
                         textAlign: TextAlign.left,
                         style: AppStyle.textstylerobotoromanregular812.copyWith(
@@ -546,7 +556,7 @@ class LeadsItemWidget extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        "Duration : 2Month".tr,
+                        "Duration : "+leadModel.duration.toString(),
                         maxLines: 1,
                         textAlign: TextAlign.left,
                         style: AppStyle.textstylerobotoromanregular83.copyWith(
@@ -564,6 +574,7 @@ class LeadsItemWidget extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }

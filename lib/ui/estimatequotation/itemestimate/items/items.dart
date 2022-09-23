@@ -23,8 +23,8 @@ class _ItemsState extends State<ItemsPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tabController =
-        Get.put(TabController(vsync: this, length: 3));
+    this._tabController =
+    (TabController(vsync: this, length: 3));
   }
 
   @override

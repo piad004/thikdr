@@ -643,7 +643,6 @@ class _AddAttendanceState extends State<AddAttendancePage> {
                                           builder: (BuildContext context) {
                                             return AllowanceDialog();
                                           });
-                                      ;
                                     },
                                     child:
                                 Container(

@@ -14,14 +14,14 @@ class OngoingProjectTabPage extends StatefulWidget {
   State<OngoingProjectTabPage> createState() => _OngoingProjectTabState();
 }
 
-class _OngoingProjectTabState extends State<OngoingProjectTabPage> with TickerProviderStateMixin {
+class _OngoingProjectTabState extends State<OngoingProjectTabPage> with SingleTickerProviderStateMixin {
 
-  late TabController group159Controller;
+   late TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    group159Controller=Get.put(TabController(length: 2, vsync: this));
+    this.tabController=(TabController(length: 2, vsync: this));
   }
 
   @override
@@ -29,6 +29,58 @@ class _OngoingProjectTabState extends State<OngoingProjectTabPage> with TickerPr
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorConstant.whiteA700,
+       /* bottomNavigationBar:   Container(
+          width: MediaQuery.of(context).size.width-40,
+          margin: EdgeInsets.only(
+            left: getHorizontalSize(
+              22.00,
+            ),
+            top: getVerticalSize(
+              12.00,
+            ),
+            right: getHorizontalSize(
+              22.00,
+            ),
+          ),
+          child: TabBar(
+            controller: this.tabController,
+            tabs: [
+              Tab(
+                text: "Ongoing Project",
+              ),
+              Tab(
+                text: "Past Project",
+              ),
+            ],
+            labelColor: ColorConstant.whiteA700,
+            unselectedLabelColor: ColorConstant.gray701,
+            indicator: BoxDecoration(
+              color: ColorConstant.deepOrange601,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(
+                  getHorizontalSize(
+                    15.00,
+                  ),
+                ),
+                topRight: Radius.circular(
+                  getHorizontalSize(
+                    15.00,
+                  ),
+                ),
+                bottomLeft: Radius.circular(
+                  getHorizontalSize(
+                    0.00,
+                  ),
+                ),
+                bottomRight: Radius.circular(
+                  getHorizontalSize(
+                    0.00,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),*/
         body: Container(
           decoration: BoxDecoration(
             color: ColorConstant.whiteA700,
@@ -298,6 +350,9 @@ class _OngoingProjectTabState extends State<OngoingProjectTabPage> with TickerPr
                           ],
                         ),
                       ),
+                      DefaultTabController(
+                        length: 2,
+                        child:
                       Container(
                         width: MediaQuery.of(context).size.width-40,
                         margin: EdgeInsets.only(
@@ -312,7 +367,7 @@ class _OngoingProjectTabState extends State<OngoingProjectTabPage> with TickerPr
                           ),
                         ),
                         child: TabBar(
-                          controller: group159Controller,
+                          controller: this.tabController,
                           tabs: [
                             Tab(
                               text: "Ongoing Project",
@@ -350,6 +405,7 @@ class _OngoingProjectTabState extends State<OngoingProjectTabPage> with TickerPr
                           ),
                         ),
                       ),
+                      ),
                       Container(
                         height: getVerticalSize(
                           0,
@@ -384,29 +440,46 @@ class _OngoingProjectTabState extends State<OngoingProjectTabPage> with TickerPr
                   decoration: BoxDecoration(
                     color: ColorConstant.whiteA700,
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                  child: DefaultTabController(
+                   /* mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                    children: [*/
+                    length: 2,
+                    child:
                       Container(
                         height: MediaQuery.of(context).size.height-216,
                         child: TabBarView(
-                          controller: group159Controller,
+                          controller: this.tabController,
                           children: [
                             OngoingProjectPage(),
                             OngoingProjectPage(),
                           ],
                         ),
                       ),
-                    ],
+                      ),
+                    //],
                   ),
                 ),
-              ),
             ],
           ),
         ),
       ),
     );
   }
+
+/*
+  Widget tabbar() => TabBar(
+
+    controller: tabController,
+    onTap: (value) {
+      setState(() {
+        selectedTabIndex = value;
+      });
+    },
+    tabs: [
+      Text("tab one"),
+      Text("tab two"),
+    ],
+  );*/
 }

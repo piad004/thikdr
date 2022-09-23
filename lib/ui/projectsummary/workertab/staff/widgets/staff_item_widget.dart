@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:thikdr/ui/projectsummary/workertab/worker/digger_page.dart';
 
-import '../../../../../theme/app_decoration.dart';
 import '../../../../../theme/app_style.dart';
 import '../../../../../utils/color_constant.dart';
 import '../../../../../utils/image_constant.dart';
@@ -23,9 +23,10 @@ class StaffItemWidget extends StatelessWidget {
         margin: EdgeInsets.only(
           top: getVerticalSize(
             8.00,
-          ), right: getVerticalSize(
-          5.00,
-        ),
+          ),
+          right: getVerticalSize(
+            5.00,
+          ),
           bottom: getVerticalSize(
             8.00,
           ),
@@ -106,7 +107,7 @@ class StaffItemWidget extends StatelessWidget {
                           height: getVerticalSize(
                             18.00,
                           ),
-                         /* width: getHorizontalSize(
+                          /* width: getHorizontalSize(
                             168.00,
                           ),*/
                           margin: EdgeInsets.only(
@@ -126,8 +127,7 @@ class StaffItemWidget extends StatelessWidget {
                             "Staff name",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
-                            style: AppStyle
-                                .textstylerobotoromanregular103
+                            style: AppStyle.textstylerobotoromanregular103
                                 .copyWith(
                               fontSize: getFontSize(
                                 14,
@@ -141,7 +141,7 @@ class StaffItemWidget extends StatelessWidget {
                           height: getVerticalSize(
                             18.00,
                           ),
-                         /* width: getHorizontalSize(
+                          /* width: getHorizontalSize(
                             168.00,
                           ),*/
                           margin: EdgeInsets.only(
@@ -161,8 +161,7 @@ class StaffItemWidget extends StatelessWidget {
                             "ID789876679876",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
-                            style: AppStyle
-                                .textstylerobotoromanregular103
+                            style: AppStyle.textstylerobotoromanregular103
                                 .copyWith(
                               fontSize: getFontSize(
                                 12,
@@ -200,7 +199,8 @@ class StaffItemWidget extends StatelessWidget {
                     padding: EdgeInsets.only(
                       top: getVerticalSize(
                         4.00,
-                      ), bottom: getVerticalSize(
+                      ),
+                      bottom: getVerticalSize(
                         4.00,
                       ),
                       left: getHorizontalSize(
@@ -222,9 +222,7 @@ class StaffItemWidget extends StatelessWidget {
                       "IN 400",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
-                      style: AppStyle
-                          .textstylerobotoromanregular103
-                          .copyWith(
+                      style: AppStyle.textstylerobotoromanregular103.copyWith(
                         fontSize: getFontSize(
                           13,
                         ),
@@ -250,9 +248,7 @@ class StaffItemWidget extends StatelessWidget {
                       "Settled",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
-                      style: AppStyle
-                          .textstylerobotoromanregular103
-                          .copyWith(
+                      style: AppStyle.textstylerobotoromanregular103.copyWith(
                         fontSize: getFontSize(
                           13,
                         ),
@@ -264,7 +260,6 @@ class StaffItemWidget extends StatelessWidget {
                 ],
               ),
             ),
-
             Padding(
               padding: EdgeInsets.only(
                 top: getVerticalSize(
@@ -274,16 +269,22 @@ class StaffItemWidget extends StatelessWidget {
                   5.00,
                 ),
               ),
-              child: Container(
-                height: getVerticalSize(
-                  26.53,
-                ),
-                width: getHorizontalSize(
-                  8.97,
-                ),
-                child: SvgPicture.asset(
-                  ImageConstant.imgDot,
-                  fit: BoxFit.fill,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => DiggerPage()));
+                },
+                child: Container(
+                  height: getVerticalSize(
+                    26.53,
+                  ),
+                  width: getHorizontalSize(
+                    8.97,
+                  ),
+                  child: SvgPicture.asset(
+                    ImageConstant.imgDot,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             ),

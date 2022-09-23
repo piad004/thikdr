@@ -1,19 +1,29 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:thikdr/ui/home/widgets/group47_item_widget.dart';
+import 'package:thikdr/ui/home/model/slider/slider_model.dart';
 import 'package:thikdr/ui/home/widgets/home_ui_for_contractor_item_widget.dart';
+import 'package:thikdr/ui/home/widgets/slider_item_widget.dart';
 import 'package:thikdr/ui/projects/ongoing_projects_tab.dart';
 
+import '../../database/app_database.dart';
+import '../../database/entity/person.dart';
+import '../../localization/Language/languages.dart';
+import '../../network/webservice.dart';
 import '../../theme/app_decoration.dart';
 import '../../theme/app_style.dart';
 import '../../utils/color_constant.dart';
 import '../../utils/image_constant.dart';
 import '../../utils/math_utils.dart';
-import 'model/group47_item_model.dart';
+import '../../utils/pref_utils.dart';
+import '../changelanguage/change_language_screen.dart';
+import '../login/login.dart';
 import 'model/home_ui_for_contractor_item_model.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,36 +31,92 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomeState();
 }
 
-class _HomeState extends State<HomePage> {
+class _HomeState extends State<HomePage> with WidgetsBindingObserver{
   TextEditingController unitAreasqfController = TextEditingController();
   TextEditingController unitAreasqfController1 = TextEditingController();
  /* Rx<HomeUiForContractorModel> homeUiForContractorModelObj =
       HomeUiForContractorModel().obs;*/
 
-  final List<HomeUiForContractorItemModel> homeUiForContractorModelObj = [
-    HomeUiForContractorItemModel(ImageConstant.imgLeads, 'Job/Leads'),
-    HomeUiForContractorItemModel(ImageConstant.imgProject, 'Project'),
-    HomeUiForContractorItemModel(ImageConstant.imgQuotation, 'Quotation'),
-    HomeUiForContractorItemModel(ImageConstant.imgInvoice, 'Invoice'),
-    HomeUiForContractorItemModel(ImageConstant.imgLabour1, 'Labour'),
-    HomeUiForContractorItemModel(ImageConstant.imgMaterial, 'Material'),
-    HomeUiForContractorItemModel(ImageConstant.imgClient, 'Client'),
-    HomeUiForContractorItemModel(ImageConstant.imgLegal, 'Legal'),
-    HomeUiForContractorItemModel(ImageConstant.imgAccount, 'Account'),
-  ];
+   late List<HomeUiForContractorItemModel> homeUiForContractorModelObj = [
+     HomeUiForContractorItemModel(ImageConstant.imgLeads, Languages.of(context)!.homeJob),
+     HomeUiForContractorItemModel(ImageConstant.imgProject, Languages.of(context)!.homeProject),
+     HomeUiForContractorItemModel(ImageConstant.imgQuotation, Languages.of(context)!.homeQuotation),
+     HomeUiForContractorItemModel(ImageConstant.imgInvoice, Languages.of(context)!.homeInvoice),
+     HomeUiForContractorItemModel(ImageConstant.imgLabour1, Languages.of(context)!.homeLabour),
+     HomeUiForContractorItemModel(ImageConstant.imgMaterial, Languages.of(context)!.homeMaterial),
+     HomeUiForContractorItemModel(ImageConstant.imgClient, Languages.of(context)!.homeClient),
+     HomeUiForContractorItemModel(ImageConstant.imgLegal, Languages.of(context)!.homeLegal),
+     HomeUiForContractorItemModel(ImageConstant.imgAccount, Languages.of(context)!.homeAccount),
+   ];
 
-  final List<Group47ItemModel> _list = [
-    Group47ItemModel('I am a Contractor'),
-    Group47ItemModel( 'I am a Developer'),
-    Group47ItemModel('I am a Labour'),
+  List<SliderImgList> _list = [
   ];
 
   int silderIndex = 0;
+  String userName = "";
+  String userBal = "₹ 0";
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
+    //updateMenuName();
+    getData();
+
+  }
+
+  void getData() async{
+    if (!await InternetConnectionChecker().hasConnection) {
+      showMsg("Check internet connection!");
+    }else {
+      getUserData();
+    }
+  }
+
+  Future<void> getUserData() async {
+    try {
+
+     /* final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+
+      final personDao = database.personDao;
+      final person = Person(1, 'Frank');
+
+      await personDao.insertPerson(person);
+      var result = await personDao.findPersonById(1);
+      print("result db : "+result.length.toString());*/
+
+     var token= await PrefUtils().getPreferencesData("token");
+
+      SliderModel sliderModel = await Webservice().requestSliderAndUserData(token.toString());
+
+      if (!sliderModel.error!) {
+        setState(() {
+         userName = sliderModel.data!.userData!.name!;
+         userBal = "₹ "+sliderModel.data!.userData!.wallet_balance!;
+         _list = sliderModel.data!.list!;
+        });
+      }
+
+      print('response : ${jsonEncode(sliderModel)}');
+    } catch (e) {
+      showMsg(e.toString());
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(final AppLifecycleState state) {
+    //if (state == AppLifecycleState.resumed) {
+      setState(() {
+        updateMenuName();
+      });
+   // }
   }
 
   @override
@@ -147,6 +213,24 @@ class _HomeState extends State<HomePage> {
                                           CrossAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
+                                        Container(
+                                    margin:EdgeInsets.only(right: 30),
+                                          child:
+                                        InkWell(
+                                          onTap: (){
+                                            PrefUtils().clearPreferencesAllData();
+
+                                            Navigator.of(context).pushAndRemoveUntil(
+                                                MaterialPageRoute(builder: (context) => LoginPage()),
+                                                    (Route<dynamic> route) => false);
+                                          },
+                                          child:Icon(
+                                            Icons.power_settings_new,
+                                            size: 20,
+                                              color: ColorConstant.whiteA700,
+                                          ),
+                                        ),
+                                        ),
                                         Image.asset(
                                           ImageConstant.imgLogo,
                                           height: getVerticalSize(
@@ -157,12 +241,21 @@ class _HomeState extends State<HomePage> {
                                           ),
                                           fit: BoxFit.fill,
                                         ),
+                                        InkWell(
+                                            onTap: (){
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return ChangeLanguageScreen();
+                                                  }).then((value) => updateMenuName());
+                                            },
+                                          child:
                                         Container(
                                           height: getVerticalSize(
-                                            22.00,
+                                            27.00,
                                           ),
                                           width: getHorizontalSize(
-                                            90.00,
+                                            95.00,
                                           ),
                                           margin: EdgeInsets.only(
                                             left: getHorizontalSize(
@@ -228,28 +321,30 @@ class _HomeState extends State<HomePage> {
                                                     ),
                                                   ),
                                                   child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.end,
                                                     mainAxisSize:
                                                         MainAxisSize.max,
                                                     children: [
-                                                      Padding(
-                                                        padding:
+                                                      Container(
+                                                  width: 58,
+                                                        margin:
                                                             EdgeInsets.only(
                                                           left:
                                                               getHorizontalSize(
-                                                            23.00,
+                                                            10.00,
                                                           ),
                                                           top: getVerticalSize(
-                                                            3.00,
+                                                            5.00,
                                                           ),
                                                           bottom:
                                                               getVerticalSize(
-                                                            3.00,
+                                                            5.00,
                                                           ),
                                                         ),
                                                         child: Text(
-                                                          "English".tr,
+                                                          Languages.of(context)!.lngName,
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                           textAlign:
@@ -265,33 +360,32 @@ class _HomeState extends State<HomePage> {
                                                           ),
                                                         ),
                                                       ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                          left:
-                                                              getHorizontalSize(
-                                                            3.83,
-                                                          ),
-                                                          top: getVerticalSize(
-                                                            10.00,
-                                                          ),
-                                                          right:
-                                                              getHorizontalSize(
-                                                            8.12,
-                                                          ),
-                                                          bottom:
-                                                              getVerticalSize(
-                                                            6.73,
-                                                          ),
-                                                        ),
-                                                        child: Container(
+                                                      Container(
                                                           height:
                                                               getVerticalSize(
-                                                            5.27,
+                                                            5,
                                                           ),
                                                           width:
                                                               getHorizontalSize(
-                                                            10.05,
+                                                            10,
+                                                          ),
+                                                        margin:
+                                                        EdgeInsets.only(
+                                                          left:
+                                                          getHorizontalSize(
+                                                            1,
+                                                          ),
+                                                          top: getVerticalSize(
+                                                            8.00,
+                                                          ),
+                                                          right:
+                                                          getHorizontalSize(
+                                                            4,
+                                                          ),
+                                                          bottom:
+                                                          getVerticalSize(
+                                                            8,
+                                                          ),
                                                           ),
                                                           child:
                                                               SvgPicture.asset(
@@ -300,13 +394,13 @@ class _HomeState extends State<HomePage> {
                                                             fit: BoxFit.fill,
                                                           ),
                                                         ),
-                                                      ),
                                                     ],
                                                   ),
                                                 ),
                                               ),
                                             ],
                                           ),
+                                        ),
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(
@@ -418,7 +512,7 @@ class _HomeState extends State<HomePage> {
                                             ),
                                           ),
                                           child: Text(
-                                            "Hello, User Name",
+                                            Languages.of(context)!.labelHello+ userName,
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.center,
                                             style: AppStyle
@@ -451,7 +545,7 @@ class _HomeState extends State<HomePage> {
                                                   ),
                                                 ),
                                                 child: Text(
-                                                  "Balance",
+                                                  Languages.of(context)!.labelBal,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   textAlign: TextAlign.center,
@@ -476,7 +570,7 @@ class _HomeState extends State<HomePage> {
                                                   ),
                                                 ),
                                                 child: Text(
-                                                  "Rs 500.00",
+                                                  userBal,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   textAlign: TextAlign.center,
@@ -604,9 +698,9 @@ class _HomeState extends State<HomePage> {
                                   ),
                                   itemCount: _list.length,
                                   itemBuilder: (context, index, realIndex) {
-                                    Group47ItemModel model =
+                                    SliderImgList model =
                                         _list[index];
-                                    return Group47ItemWidget(
+                                    return SliderItemWidget(
                                       model,
                                     );
                                   },
@@ -1680,7 +1774,7 @@ class _HomeState extends State<HomePage> {
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Align(
@@ -1715,7 +1809,7 @@ class _HomeState extends State<HomePage> {
                             ),
                           ),
                           child: Text(
-                            "Menu",
+                              Languages.of(context)!.homeMenu,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: AppStyle.textstylerobotoregular10.copyWith(
@@ -1773,7 +1867,7 @@ class _HomeState extends State<HomePage> {
                               ),
                             ),
                             child: Text(
-                              "Enquiry",
+                              Languages.of(context)!.homeEnquiry,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.textstylerobotoregular10.copyWith(
@@ -1833,7 +1927,7 @@ class _HomeState extends State<HomePage> {
                             ),
                           ),
                           child: Text(
-                            "Tutorial",
+                            Languages.of(context)!.homeTutorial,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: AppStyle.textstylerobotoregular10.copyWith(
@@ -1891,7 +1985,7 @@ class _HomeState extends State<HomePage> {
                               ),
                             ),
                             child: Text(
-                              "Notifications".tr,
+                              Languages.of(context)!.homeNotification,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.left,
                               style: AppStyle.textstylerobotoregular10.copyWith(
@@ -1912,5 +2006,30 @@ class _HomeState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void updateMenuName() {
+    Timer(
+        Duration(seconds: 1),
+            () =>  {
+    homeUiForContractorModelObj = [
+      HomeUiForContractorItemModel(ImageConstant.imgLeads, Languages.of(context)!.homeJob),
+      HomeUiForContractorItemModel(ImageConstant.imgProject, Languages.of(context)!.homeProject),
+      HomeUiForContractorItemModel(ImageConstant.imgQuotation, Languages.of(context)!.homeQuotation),
+      HomeUiForContractorItemModel(ImageConstant.imgInvoice, Languages.of(context)!.homeInvoice),
+      HomeUiForContractorItemModel(ImageConstant.imgLabour1, Languages.of(context)!.homeLabour),
+      HomeUiForContractorItemModel(ImageConstant.imgMaterial, Languages.of(context)!.homeMaterial),
+      HomeUiForContractorItemModel(ImageConstant.imgClient, Languages.of(context)!.homeClient),
+      HomeUiForContractorItemModel(ImageConstant.imgLegal, Languages.of(context)!.homeLegal),
+      HomeUiForContractorItemModel(ImageConstant.imgAccount, Languages.of(context)!.homeAccount),
+    ]
+        }
+            );
+  }
+
+  void showMsg(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(msg),
+    ));
   }
 }

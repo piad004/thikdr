@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:thikdr/ui/estimate/estimate.dart';
 import 'package:thikdr/ui/estimatequotation/estimate_quotation.dart';
 
 import '../../../theme/app_style.dart';
@@ -189,7 +190,11 @@ class _EstimateDetailsState extends State<EstimateDetailsPage> {
                       ),
                       InkWell(
                         onTap: () {
-
+                             Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            EstimatePage()));
                         },
                         child: Container(
                           margin: EdgeInsets.only(

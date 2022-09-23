@@ -16,8 +16,28 @@ class PrefUtils {
     print('SharedPreference Initialized');
   }
 
-  ///will clear all the data stored in preference
-  void clearPreferencesData() async {
+  //will clear all the data stored in preference
+  void clearPreferencesAllData() async {
+    _sharedPreferences ??= await SharedPreferences.getInstance();
     _sharedPreferences!.clear();
   }
+
+  //will clear data stored in preference
+  void clearPreferencesData(key) async {
+    _sharedPreferences ??= await SharedPreferences.getInstance();
+    _sharedPreferences!.remove(key);
+  }
+
+  //data stored in preference
+  void savePreferencesData(key,value) async {
+    _sharedPreferences ??= await SharedPreferences.getInstance();
+    _sharedPreferences!.setString(key, value);
+  }
+
+  //get data from preference
+  Future<String?> getPreferencesData(key) async {
+    _sharedPreferences ??= await SharedPreferences.getInstance();
+    return _sharedPreferences!.getString(key);
+  }
+
 }

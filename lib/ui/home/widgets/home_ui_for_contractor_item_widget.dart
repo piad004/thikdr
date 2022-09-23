@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:thikdr/ui/estimate/estimate.dart';
+import 'package:thikdr/ui/estimate/estimatedetails/estimate_details.dart';
 import 'package:thikdr/ui/leads/leadstab/leads_tab.dart';
 import 'package:thikdr/ui/materiallibrary/material_library_page.dart';
 import 'package:thikdr/ui/projects/ongoing_projects_tab.dart';
@@ -65,10 +67,14 @@ class HomeUiForContractorItemWidget extends StatelessWidget {
                 MaterialPageRoute(
                     builder: (context) => OngoingProjectTabPage()));
           } else if (index == 2) {
+           /* Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EstimateQuotationPage()));*/
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EstimateQuotationPage()));
+                    builder: (context) => EstimateDetailsPage()));
           } else if (index == 5) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => MaterialLibraryPage()));
@@ -165,11 +171,11 @@ class HomeUiForContractorItemWidget extends StatelessWidget {
                   1.00,
                 ),
                 bottom: getVerticalSize(
-                  20.00,
+                  18.00,
                 ),
               ),
               child: Text(
-                homeUiForContractorItemModelObj.name.toUpperCase(),
+                homeUiForContractorItemModelObj.name,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: AppStyle.textstylerobotobold14.copyWith(

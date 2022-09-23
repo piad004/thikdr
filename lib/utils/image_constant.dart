@@ -137,10 +137,15 @@ class ImageConstant {
 
   static String imgVector68 = 'assets/images/img_vector_68.svg';
 
-
   static String imgRectangle581 = 'assets/images/img_rectangle58_1.svg';
 
+  static String imgShare1 = 'assets/images/img_share.png';
+
+  static String imgHomeConstruction = 'assets/images/img_home_construction.png';
+
   static String imgSetting = 'assets/images/img_setting.svg';
+
+  static String imgCloseIcon = 'assets/images/img_close_icon.svg';
 
   static String imgVector116 = 'assets/images/img_vector_116.svg';
 

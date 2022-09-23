@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:thikdr/ui/projects/edit_project_page.dart';
 import 'package:thikdr/ui/projects/models/onging_project_model.dart';
 
 import '../../../theme/app_decoration.dart';
@@ -212,6 +213,14 @@ class OngingProjectItemWidget extends StatelessWidget {
                             ),
                           ),
                         ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditProjectPage()));
+                          },
+                          child:
                         Padding(
                           padding: EdgeInsets.only(
                             left: getHorizontalSize(
@@ -237,6 +246,7 @@ class OngingProjectItemWidget extends StatelessWidget {
                             ),
                           ),
                         ),
+    ),
                       ],
                     ),
                   ),

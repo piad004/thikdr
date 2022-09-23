@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:thikdr/ui/estimatequotation/estimate_pdf_page.dart';
 import 'package:thikdr/ui/estimatequotation/itemestimate/add_item_estimate.dart';
 
 import '../../theme/app_decoration.dart';
@@ -928,11 +929,11 @@ class _EstimateQuotationState extends State<EstimateQuotationPage> {
                                           ),
                                           InkWell(
                                             onTap: (){
-                                              Navigator.push(
+                                             /* Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          AddItemEstimatePage()));
+                                                          AddItemEstimatePage()));*/
                                             },
                                               child: Align(
                                             alignment: Alignment.center,
@@ -1804,6 +1805,15 @@ class _EstimateQuotationState extends State<EstimateQuotationPage> {
                               ),
                             ),
                           ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      EstimatePDFPage()));
+                        },
+                        child:
                           Container(
                             alignment: Alignment.center,
                             height: getVerticalSize(
@@ -1825,6 +1835,7 @@ class _EstimateQuotationState extends State<EstimateQuotationPage> {
                               ),
                             ),
                           ),
+                      ),
                         ],
                       ),
                     ),

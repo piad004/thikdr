@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:thikdr/ui/home/model/slider/slider_model.dart';
 
 import '../../../theme/app_style.dart';
 import '../../../utils/image_constant.dart';
 import '../../../utils/math_utils.dart';
-import '../model/group47_item_model.dart';
 
 // ignore: must_be_immutable
-class Group47ItemWidget extends StatelessWidget {
+class SliderItemWidget extends StatelessWidget {
 
-  Group47ItemModel group47ItemModelObj;
+  SliderImgList slider;
 
-  Group47ItemWidget(this.group47ItemModelObj);
+  SliderItemWidget(this.slider);
 
   //var controller = Get.find<HomeUiForContractorController>();
 
@@ -29,8 +29,9 @@ class Group47ItemWidget extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Image.asset(
-              ImageConstant.imgBannerphoto1,
+            child: Image.network(
+              //ImageConstant.imgBannerphoto1,
+              slider.img.toString(),
               height: getVerticalSize(
                 135.00,
               ),
@@ -40,7 +41,7 @@ class Group47ItemWidget extends StatelessWidget {
               fit: BoxFit.fill,
             ),
           ),
-          Align(
+         /* Align(
             alignment: Alignment.topLeft,
             child: Padding(
               padding: EdgeInsets.only(
@@ -100,7 +101,7 @@ class Group47ItemWidget extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

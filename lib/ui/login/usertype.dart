@@ -1,26 +1,38 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:thikdr/ui/login/contractor_register.dart';
 import 'package:thikdr/ui/login/labour_register.dart';
+import 'package:thikdr/ui/login/skill_model.dart';
 import 'package:thikdr/ui/login/uses_type_model.dart';
 import 'package:thikdr/utils/color_constant.dart';
 import 'package:thikdr/utils/image_constant.dart';
 
+import '../../network/webservice.dart';
+
 class UserTypePage extends StatefulWidget {
+  String mobile="";
+  UserTypePage(this.mobile);
+
   @override
   State<UserTypePage> createState() => _UserTypeState();
 }
 
 class _UserTypeState extends State<UserTypePage> {
-  final List<UserTypeModel> _userTypeList = [
+  /* List<UserTypeModel> _userTypeList = [
     UserTypeModel(ImageConstant.imgContractor, 'I am a Contractor'),
     UserTypeModel(ImageConstant.imgDeveloper, 'I am a Developer'),
     UserTypeModel(ImageConstant.imgLabour, 'I am a Labour'),
     UserTypeModel(ImageConstant.imgSuppler, 'I am a Suppler'),
+  ];*/
+
+List<SkillList> _userTypeList = [
   ];
 
   @override
   void initState() {
     super.initState();
+    getRoles();
   }
 
   @override
@@ -80,13 +92,13 @@ class _UserTypeState extends State<UserTypePage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        ContractorRegisterPage()));
+                                        ContractorRegisterPage(id: _userTypeList[index].id.toString(), mobile: widget.mobile)));
                           }else if(index==2){
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        LabourRegisterPage()));
+                                        LabourRegisterPage(id: _userTypeList[index].id.toString(), mobile: widget.mobile,)));
                           }
                         },
                         child: Padding(
@@ -156,8 +168,8 @@ class _UserTypeState extends State<UserTypePage> {
                                                 right: 13,
                                                 bottom: 12,
                                               ),
-                                              child: Image.asset(
-                                                _userTypeList[index].icon,
+                                              child: Image.network(
+                                                _userTypeList[index].img!,
                                                 height: 58,
                                                 width: 58,
                                                 fit: BoxFit.fill,
@@ -176,7 +188,7 @@ class _UserTypeState extends State<UserTypePage> {
                                       bottom: 5,
                                     ),
                                     child: Text(
-                                      _userTypeList[index].title,
+                                      _userTypeList[index].name!,
                                       overflow: TextOverflow.ellipsis,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
@@ -197,5 +209,21 @@ class _UserTypeState extends State<UserTypePage> {
                 ),
               ],
             )));
+  }
+
+  Future<void> getRoles() async {
+    try{
+    SkillModel skillModel = await Webservice().requestRoleList();
+
+    if (!skillModel.error!) {
+      setState(() {
+        _userTypeList = skillModel.data!.list!;
+      });
+    }
+
+    print('response : ${jsonEncode(skillModel)}');
+  }catch(e){
+
+    }
   }
 }

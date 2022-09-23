@@ -1,7 +1,10 @@
+import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:thikdr/ui/cashfree_page.dart';
+import 'package:thikdr/ui/estimate/addestimate/add_estimate_page.dart';
 import 'package:thikdr/ui/estimate/widgets/estimate_details_item_widget.dart';
 
 import '../../theme/app_decoration.dart';
@@ -9,6 +12,7 @@ import '../../theme/app_style.dart';
 import '../../utils/color_constant.dart';
 import '../../utils/image_constant.dart';
 import '../../utils/math_utils.dart';
+import '../estimatequotation/estimate_quotation.dart';
 import 'estimatedetails/estimate_details.dart';
 import 'models/estimate_details_item_model.dart';
 import 'models/estimate_details_model.dart';
@@ -42,7 +46,7 @@ class _EstimateState extends State<EstimatePage> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          "Estimate / Proposal".toUpperCase(),
+          "Estimate Details".toUpperCase(),
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
           style: AppStyle.textstylerobotobold20.copyWith(
@@ -220,6 +224,7 @@ class _EstimateState extends State<EstimatePage> {
                                 width: getHorizontalSize(
                                   165.00,
                                 ),
+                                height: 40,
                                 margin: EdgeInsets.only(
                                   left: getHorizontalSize(
                                     14.00,
@@ -235,17 +240,10 @@ class _EstimateState extends State<EstimatePage> {
                                   left: getHorizontalSize(
                                     12.00,
                                   ),
-                                  top: getVerticalSize(
-                                    14.00,
-                                  ),
-                                  bottom: getVerticalSize(
-                                    14.00,
-                                  ),
                                 ),
                                 decoration:
                                     AppDecoration.textstylerobotoromanbold166,
-                                child: Text(
-                                  "Enter Name",
+                                child: TextField(
                                   maxLines: 1,
                                   textAlign: TextAlign.left,
                                   style: AppStyle.textstylerobotoromanbold166
@@ -255,6 +253,15 @@ class _EstimateState extends State<EstimatePage> {
                                     ),
                                     height: 1.00,
                                   ),
+                                  decoration: new InputDecoration(
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      contentPadding:
+                                      EdgeInsets.only(left: 5, bottom: 10, top: 5, right: 5),
+                                      hintText: "Enter Name"),
                                 ),
                               ),
                               Container(
@@ -636,6 +643,156 @@ class _EstimateState extends State<EstimatePage> {
                                       },
                                     ),
                                   ),
+
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: getVerticalSize(
+                          1.00,
+                        ),
+                        width: getHorizontalSize(
+                          377.00,
+                        ),
+                        margin: EdgeInsets.only(
+                          right: getHorizontalSize(
+                            2.00,
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                          color: ColorConstant.gray301,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                          left: getHorizontalSize(
+                            1.00,
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                          color: ColorConstant.gray50,
+                        ),
+                        child:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: getHorizontalSize(
+                                  12.00,
+                                ),
+                                right: getHorizontalSize(
+                                  12.00,
+                                ),
+                                top: getVerticalSize(
+                                  10.00,
+                                ),
+                                bottom: getVerticalSize(
+                                  10.00,
+                                ),
+                              ),
+                              child: Text(
+                                "Balance : Rs 762.50",
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.left,
+                                style: AppStyle.textstylerobotoromanregular1014.copyWith(
+                                  fontSize: getFontSize(
+                                    14,
+                                  ),
+                                  height: 1.00,
+                                ),
+                              ),
+                            ),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: getHorizontalSize(
+                                      12.00,
+                                    ),
+                                    top: getVerticalSize(
+                                      10.00,
+                                    ),
+                                    bottom: getVerticalSize(
+                                      10.00,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "Status : ",
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: AppStyle.textstylerobotoromanregular1014.copyWith(
+                                      fontSize: getFontSize(
+                                        14,
+                                      ),
+                                      height: 1.00,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: getVerticalSize(
+                                      10.00,
+                                    ),
+                                    right: getHorizontalSize(
+                                      10.00,
+                                    ),
+                                    bottom: getVerticalSize(
+                                      10.00,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "Open Estimate",
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.left,
+                                    style: AppStyle.textstylerobotoromanregular1014.copyWith(
+                                      fontSize: getFontSize(
+                                        14,
+                                      ),
+                                      height: 1.00,
+                                      color: ColorConstant.yellow500
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            /*Padding(
+                              padding: EdgeInsets.only(
+                                top: getVerticalSize(
+                                  10.00,
+                                ),
+                                right: getHorizontalSize(
+                                  73.00,
+                                ),
+                                bottom: getVerticalSize(
+                                  10.00,
+                                ),
+                              ),
+                              child: Text(
+                                "Ref No : 1",
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.left,
+                                style: AppStyle.textstylerobotoromanregular1014.copyWith(
+                                  fontSize: getFontSize(
+                                    14,
+                                  ),
+                                  height: 1.00,
+                                ),
+                              ),
+                            ),*/
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                                   Padding(
                                     padding: EdgeInsets.only(
                                       top: getVerticalSize(
@@ -674,7 +831,7 @@ class _EstimateState extends State<EstimatePage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            EstimateDetailsPage()));
+                                            AddEstimatePage()));
                               },
                               child: Align(
                                 alignment: Alignment.center,
@@ -796,5 +953,51 @@ class _EstimateState extends State<EstimatePage> {
         ),
       ),
     ));
+  }
+
+  // WEB Intent
+  makePayment() {
+    //Replace with actual values
+    String orderId = "ORDER_ID";
+    String stage = "TEST";
+    //String orderAmount = "ORDER_AMOUNT";
+    String orderAmount = "10";
+    String tokenData = "18441588eef862d4129daf90314481";
+    String customerName = "Customer Name";
+    String orderNote = "Order_Note";
+    String orderCurrency = "INR";
+    String appId = "18441588eef862d4129daf90314481";
+    String customerPhone = "9089876789";
+    String customerEmail = "sample@gmail.com";
+    String notifyUrl = "https://test.gocashfree.com/notify";
+
+    Map<String, dynamic> inputParams = {
+      "orderId": orderId,
+      "orderAmount": orderAmount,
+      "customerName": customerName,
+      "orderNote": orderNote,
+      "orderCurrency": orderCurrency,
+      "appId": appId,
+      "customerPhone": customerPhone,
+      "customerEmail": customerEmail,
+      "stage": stage,
+      "tokenData": tokenData,
+      "notifyUrl": notifyUrl
+    };
+
+    CashfreePGSDK.doPayment(inputParams)
+        .then((value) => value?.forEach((key, value) {
+      print("$key : $value");
+      //Do something with the result
+if(key=="txStatus"){
+
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              AddEstimatePage()));
+}
+    })
+    );
   }
 }

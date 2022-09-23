@@ -1,17 +1,19 @@
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:thikdr/ui/leads/leadstab/myleads/widgets/my_leads_item_widget.dart';
 
+import '../../../../network/webservice.dart';
 import '../../../../theme/app_style.dart';
 import '../../../../utils/color_constant.dart';
 import '../../../../utils/image_constant.dart';
 import '../../../../utils/math_utils.dart';
-import 'models/my_leads_item_model.dart';
-import 'models/my_leads_model.dart';
+import '../../../../utils/pref_utils.dart';
+import '../../leaddetails/model/lead_model.dart';
 
 class MyLeadsPage extends StatefulWidget {
   @override
@@ -23,7 +25,48 @@ class _MyLeadsState extends State<MyLeadsPage>  with TickerProviderStateMixin  {
 
   TextEditingController searchbynameController = TextEditingController();
 
-  Rx<MyLeadsModel> myLeadsModelObj = MyLeadsModel().obs;
+ // Rx<MyLeadsModel> myLeadsModelObj = MyLeadsModel().obs;
+
+  List<LeadList> _list = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    getData();
+  }
+
+  void getData() async{
+    if (!await InternetConnectionChecker().hasConnection) {
+      showMsg("Check internet connection!");
+    }else {
+      getMyLeads();
+    }
+  }
+
+  Future<void> getMyLeads() async {
+    try {
+      var token= await PrefUtils().getPreferencesData("token");
+
+      LeadModel leadModel = await Webservice().requestMyLeadsList(token.toString());
+
+      if (!leadModel.error!) {
+        setState(() {
+         _list = leadModel.data!.list!;
+        });
+      }
+
+      print('response : ${jsonEncode(leadModel)}');
+    } catch (e) {
+      showMsg(e.toString());
+    }
+  }
+
+  void showMsg(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(msg),
+    ));
+  }
 
 
   @override
@@ -142,19 +185,17 @@ class _MyLeadsState extends State<MyLeadsPage>  with TickerProviderStateMixin  {
                     25.00,
                   ),
                 ),
-                child: Obx(
-                      () => ListView.builder(
+                child: ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount:
-                    myLeadsModelObj.value.myLeadsItemList.length,
+                    _list.length,
                     itemBuilder: (context, index) {
-                      MyLeadsItemModel model = myLeadsModelObj.value.myLeadsItemList[index];
+                      LeadList model = _list[index];
                       return MyLeadsItemWidget(
                         model,
                       );
                     },
-                  ),
                 ),
               ),
             ),

@@ -6,21 +6,33 @@ import '../../../../../theme/app_style.dart';
 import '../../../../../utils/color_constant.dart';
 import '../../../../../utils/image_constant.dart';
 import '../../../../../utils/math_utils.dart';
-import '../models/my_leads_item_model.dart';
+import '../../../leaddetails/model/lead_details_model.dart';
+import '../../../leaddetails/model/lead_model.dart';
+import '../../../leaddetails/my_leads_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // ignore: must_be_immutable
 class MyLeadsItemWidget extends StatelessWidget {
-  MyLeadsItemWidget(this.myLeadsItemModelObj);
+  MyLeadsItemWidget(this.myLeadsModel);
 
-  MyLeadsItemModel myLeadsItemModelObj;
+  LeadList myLeadsModel;
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.center,
-      child: Container(
+      child:  InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MyLeadDetailsPage(myLeadsModel as Details))
+          );
+        },
+        child:
+        Container(
         margin: EdgeInsets.only(
           top: getVerticalSize(
             10.00,
@@ -82,7 +94,7 @@ class MyLeadsItemWidget extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      "UPVC DOORS".tr,
+                      myLeadsModel.category.toString(),
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.left,
                       style: AppStyle.textstylerobotoromanregular8.copyWith(
@@ -108,7 +120,7 @@ class MyLeadsItemWidget extends StatelessWidget {
                       child: Padding(padding: EdgeInsets.only(left: getHorizontalSize(18),right: getHorizontalSize(18)),
                       child: 
                       Text(
-                        "New".tr,
+                       myLeadsModel.lead_status.toString(),
                         textAlign: TextAlign.left,
                         style:
                             AppStyle.textstylerobotoromanregular1013.copyWith(
@@ -136,7 +148,7 @@ class MyLeadsItemWidget extends StatelessWidget {
                 ),
               ),
               child: Text(
-                "Mk: office".tr,
+                myLeadsModel.user.toString(),
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: AppStyle.textstylerobotobold12.copyWith(
@@ -169,7 +181,7 @@ class MyLeadsItemWidget extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      "Guntur, Andhra Pradesh, India \n08 April, 2022".tr,
+                      myLeadsModel.address.toString(),
                       maxLines: 2,
                       textAlign: TextAlign.left,
                       style: AppStyle.textstylerobotoromanregular104.copyWith(
@@ -201,7 +213,7 @@ class MyLeadsItemWidget extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            "Rs.900,757,417".tr,
+                            "₹ "+myLeadsModel.estmd_price.toString(),
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style:
@@ -516,6 +528,7 @@ class MyLeadsItemWidget extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }
